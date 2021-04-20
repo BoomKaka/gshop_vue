@@ -1,7 +1,7 @@
 <template>
   <section class="msite">
     <!--首页头部-->
-    <HeaderTop :title="address.name">
+    <HeaderTop title="太白南路西电北校区（95号楼）">
       <span class="header_search" slot="left">
         <i class="iconfont icon-sousuo"></i>
       </span>
@@ -130,7 +130,6 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex'
   import Swiper from "swiper"
   import 'swiper/dist/css/swiper.min.css'
   import HeaderTop from "../../components/HeaderTop/HeaderTop.vue"
@@ -146,9 +145,6 @@
           el: '.swiper-pagination',
         },
           })
-    },
-    computed:{
-      ...mapState(['address'])
     },
     components:{
       HeaderTop,
