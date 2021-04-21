@@ -1,7 +1,7 @@
 <template>
   <section class="msite">
     <!--首页头部-->
-    <HeaderTop :title="address.name">
+    <HeaderTop title="太白南路西电北校区（95号楼）">
       <span class="header_search" slot="left">
         <i class="iconfont icon-sousuo"></i>
       </span>
@@ -39,7 +39,6 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex'
   import Swiper from "swiper"
   import 'swiper/dist/css/swiper.min.css'
   import HeaderTop from "../../components/HeaderTop/HeaderTop.vue"
@@ -58,6 +57,7 @@
 
       
     },
+<<<<<<< HEAD
     computed:{
       ...mapState(['address','categorys']),
       //根据categorys一维数组生成一个二维数组，小数组最大是8个
@@ -105,6 +105,8 @@
         })
       }
     },
+=======
+>>>>>>> c5caec2aaa63dd58fd2bb3fd659c61a2acb6ef06
     components:{
       HeaderTop,
       ShopList
