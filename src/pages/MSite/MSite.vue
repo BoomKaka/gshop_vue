@@ -1,7 +1,7 @@
 <template>
   <section class="msite">
     <!--首页头部-->
-    <HeaderTop title="太白南路西电北校区（95号楼）">
+    <HeaderTop :title="address.name">
       <span class="header_search" slot="left">
         <i class="iconfont icon-sousuo"></i>
       </span>
@@ -39,6 +39,7 @@
 </template>
 
 <script>
+  import {mapState} from 'vuex'
   import Swiper from "swiper"
   import 'swiper/dist/css/swiper.min.css'
   import HeaderTop from "../../components/HeaderTop/HeaderTop.vue"
@@ -52,12 +53,9 @@
     },
     mounted(){
       //获取食品分类数组
-      this.$store.dispatch('getCategory')
-
-
-      
+      this.$store.dispatch('getCategory') ;
     },
-<<<<<<< HEAD
+
     computed:{
       ...mapState(['address','categorys']),
       //根据categorys一维数组生成一个二维数组，小数组最大是8个
@@ -94,7 +92,7 @@
         },100)*/
 
         //希望界面数据更新立即创建Swiper对象
-        this.$nextTick(() => {  //一旦完成数据更新，就立即调用（nextTick要写在数据更新之后）
+        this.$nextTick(() => {  //一旦完成更新，就立即调用
           new Swiper('.swiper-container',{
             loop:true, //可以循环轮播
             //如果需要分页器
@@ -105,8 +103,6 @@
         })
       }
     },
-=======
->>>>>>> c5caec2aaa63dd58fd2bb3fd659c61a2acb6ef06
     components:{
       HeaderTop,
       ShopList
