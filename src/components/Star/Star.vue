@@ -1,7 +1,7 @@
 <template>
    <div class="star" :class="'star-'+size">
       <span class="star-item" v-for="(sc,index) in starClasses" :class="sc" :key="index"></span>
-    
+      
     </div>
 </template>
 
