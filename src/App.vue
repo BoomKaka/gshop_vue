@@ -8,18 +8,19 @@
 <script>
   import {mapActions} from 'vuex'
   import FooterGuide from './components/FooterGuide/FooterGuide.vue'
-  import {reqAddress} from './api'
+  //import {reqAddress} from './api'
 
   export default {
     mounted () {
       // this.$store.dispatch('getAddress')
       this.getAddress()
+      this.getUserInfo()
       // const res = await reqAddress('40.10038,116.36867')
       // console.log(res)
     },
 
     methods: {
-      ...mapActions(['getAddress', 'getCategory'])
+      ...mapActions(['getAddress','getUserInfo'])
     },
 
     components:{

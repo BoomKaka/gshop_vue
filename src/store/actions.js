@@ -6,13 +6,17 @@
 import {
     RECEIVE_ADDRESS,
     RECEIVE_CATEGORY,
-    RECEIVE_SHOPS
+    RECEIVE_SHOPS,
+    RECEIVE_USER_INFO,
+    RESET_USER_INFO
 } from './mutation-types'
 
 import {
   reqAddress,
   reqFoodCategorys,
-  reqShops
+  reqShops,
+  reqUserInfo,
+  reqLogout
 } from '../api'
 
 export default {
@@ -38,14 +42,35 @@ export default {
    },
 
    ///异步获取商家
-   async getShops({commit,state}){
+    async getShops({commit,state}){
     //  const latitude = state.latitude;
     //  const longitude = state.longitude;
     const {latitude,longitude} = state
-     const result = await reqShops(latitude,longitude)
-     if(result.code === 0){
-       const shops = result.data
-       commit(RECEIVE_SHOPS,{shops})
-     }
-   }
+      const result = await reqShops(latitude,longitude)
+      if(result.code === 0){
+        const shops = result.data
+        commit(RECEIVE_SHOPS,{shops})
+      }
+    },
+    //同步记录用户信息  如果前端中没有用户信息，则需要异步向后台请求用户信息；这里用户输入了信息，可以不用异步函数
+    recordUser({commit},userinfo){
+      commit(RECEIVE_USER_INFO,{userinfo})
+    },
+
+    //异步获取用户信息
+    async getUserInfo({commit}){
+      const result = await reqUserInfo()
+      if(result.code === 0){
+        const userinfo = result.data
+        commit(RECEIVE_USER_INFO,{userinfo})
+      }
+    },
+
+    //异步退出
+    async logout({commit}) {
+      const result = await reqLogout()
+      if(result.code === 0){
+        commit(RESET_USER_INFO)
+      }
+    }
 }

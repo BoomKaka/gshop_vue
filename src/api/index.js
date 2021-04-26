@@ -29,7 +29,7 @@ export const reqSendCaptcha = () => ajax(BASE_URL+'/captcha')
 
 
 //  6、用户名密码登陆(#6用户名密码登陆)
-export const reqLoginPwd = (name,pwd,captcha) => ajax(BASE_URL+'/login_pwd',{name,pwd,captcha},'POST')
+export const reqLoginPwd = ({name,pwd,captcha}) => ajax(BASE_URL+'/login_pwd',{name,pwd,captcha},'POST')
 
 
 //  7、发送短信验证码(#7发送短信验证码)

@@ -2,12 +2,13 @@
   <section class="msite">
     <!--首页头部-->
     <HeaderTop :title="address.name">
-      <span class="header_search" slot="left">
+      <router-link class="header_search" slot="left" to="/search">
         <i class="iconfont icon-sousuo"></i>
-      </span>
-      <span class="header_login" slot="right"> 
-        <span class="header_login_text">登录|注册</span>
-      </span>
+      </router-link>
+      <router-link class="header_login" slot="right" :to="userinfo._id ? '/userinfo':'/login'"> 
+        <span class="header_login_text" v-if="!userinfo._id">登录|注册</span>
+        <span class="header_login_text" v-else><i class="iconfont icon-touxiang"></i></span>
+      </router-link>
     </HeaderTop>
     <!--首页导航-->
     <nav class="msite_nav">
@@ -54,12 +55,12 @@
     },
     mounted(){
       //获取食品分类数组
-      this.$store.dispatch('getCategory') ;
+      this.$store.dispatch('getCategory') 
       this.$store.dispatch('getShops')
     },
 
     computed:{
-      ...mapState(['address','categorys']),
+      ...mapState(['address','categorys','userinfo']),
       //根据categorys一维数组生成一个二维数组，小数组最大是8个
       categorysArr(){
         const {categorys} = this

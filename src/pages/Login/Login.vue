@@ -26,6 +26,7 @@
                 <a href="javascript:;">《用户服务协议》</a>
               </section>
             </div>
+
             <div :class="{on: !loginWay}">
               <section>
                 <section class="login_message">
@@ -40,11 +41,13 @@
                   </div>
                 </section>
                 <section class="login_message">
-                  <input type="text" maxlength="11" placeholder="验证码" v-model="captcha">
-                  <img class="get_verification" src="./images/captcha.svg" alt="captcha">
+                  <input type="text" maxlength="11" placeholder="验证码" v-model="captcha" ref="input_captcha">
+                  <img class="get_verification" src="http://localhost:4000/captcha" alt="captcha"
+                      @click="getCaptcha" ref="captcha">
                 </section>
               </section>
             </div>
+
             <button class="login_submit">登录</button>
           </form>
           <a href="javascript:;" class="about_us">关于我们</a>
@@ -60,6 +63,7 @@
 <script>
 //window.addEventListener('touchmove', func, { passive: false })
 import AlertTip from "../../components/AlertTip/AlertTip"
+import {reqSendCode,reqLoginSms,reqLoginPwd} from "../../api/index.js"
 export default {
   data(){
     return{
@@ -71,7 +75,7 @@ export default {
       code:'', //短信验证码
       name:'', //用户名
       captcha:'', //图片验证码
-      AlertText:'', //提示文本
+      alertText:'', //提示文本
       showAlert: false, //是否显示提示框
     }
   },
@@ -85,19 +89,30 @@ export default {
   },
   methods:{
     //异步获取短信验证码
-    getCode(){
+    async getCode(){
       //如果当前没有计时
       if(!this.computeTime){
         //启动倒计时
         this.computeTime = 30
-        const internalId = setInterval(() => {
+        this.internalId = setInterval(() => {
           this.computeTime--
           if(this.computeTime<=0){
-            clearInterval(internalId)
+            clearInterval(this.internalId)
           }
         },1000)
-        //请求验证码
-        
+
+        //发送ajax请求，请求验证码
+        const result = await reqSendCode(this.phone)
+        if(result.code === 1){
+          //显示提示
+          this.showAlerts(result.msg)
+          //停止倒计时
+          if(this.computeTime){
+            this.computeTime = 0
+            clearInterval(this.internalId)
+            this.internalId = undefined
+          }
+        }
       }
     },
     showAlerts(alertText){
@@ -105,34 +120,71 @@ export default {
       this.alertText=alertText
     },
     //异步登录 前台表单数据验证
-    login(){
+    async login(){
+      let result 
       //前台表单数据验证
-       if(this.loginWay){    //短信登录
+      if(this.loginWay){    //短信登录
         const {rightPhone, phone, code} = this
         if(!this.rightPhone){
           //手机号不正确
           this.showAlerts('手机号不正确')
+          return
         }else if(!(/^\d{6}$/.test(code))){
           //验证码必须6位数字
           this.showAlerts('验证码必须6位数字')
+          return
         }
-       }else{  //密码登录
-         if(!this.name){
-           //用户名必须指定
-           this.showAlerts('用户名必须指定')
-         }else if(!this.pwd){
-           //密码必须指定
-           this.showAlerts('密码必须指定')
-         }else if(!this.captcha){
-           //验证码必须指定
-           this.showAlerts('验证码必须指定')
-         }
-       }
-       
+        //发送ajax请求
+        result = await reqLoginSms({phone,code})
+      }else{  //密码登录
+        const {name,pwd,captcha} = this
+        if(!this.name){
+          //用户名必须指定
+          this.showAlerts('用户名必须指定')
+          return
+        }else if(!this.pwd){
+          //密码必须指定
+          this.showAlerts('密码必须指定')
+          return
+        }else if(!this.captcha){
+          //验证码必须指定
+          this.showAlerts('验证码必须指定')
+          return
+        }
+        //发送ajax请求
+        result = await reqLoginPwd({name,pwd,captcha})
+      }
+      //停止倒计时
+      if(this.computeTime){
+        this.computeTime = 0
+        clearInterval(this.internalId)
+        this.internalId = undefined
+      }
+      //根据结果处理数据
+      if(result.code === 0){
+        const user = result.data
+        //将user保存到vuex的state
+        this.$store.dispatch('recordUser', user)
+        //跳转到个人中心页面
+        this.$router.replace('/profile')
+      }else{
+    
+        //显示警告信息
+        const msg = result.msg
+        this.showAlerts(msg)
+          //显示新的图片验证码
+        this.getCaptcha()
+      }
     },
     closeTip(){
       this.showAlert=false
       this.alertText=''
+    },
+    //获取一个新的图片验证码
+    getCaptcha(){
+      //event.target.src = 'http://localhost:4000/captcha?time=' + Date.now()
+      this.$refs.captcha.src = 'http://localhost:4000/captcha?time=' + Date.now()
+      //this.$refs.captcha = ""
     }
   }
 }
