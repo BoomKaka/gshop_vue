@@ -5,6 +5,8 @@ import router from './router'
 import store from './store'
 import { Button } from 'mint-ui'
 
+import './mock/mockServer.js'  //加载mockServer即可
+
 Vue.config.productionTip=false  //阻止启动生产消息，常用作指令
 
 //注册全局组件标签

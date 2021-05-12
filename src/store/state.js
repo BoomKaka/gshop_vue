@@ -10,4 +10,9 @@ export default{
    categorys:[], //食品分类数组
    shops:[],  //商家数组
    userinfo:{},   //用户信息
+
+   goods:[], //商品列表
+   ratings:[], //用户评价
+   info:{}   ,   //商品信息
+   
 }
