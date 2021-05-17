@@ -14,6 +14,7 @@ import {
     RECEIVE_RATINGS,
     INCREMENT_FOOD_COUNT,
     DECREMENT_FOOD_COUNT,
+    CLEAR_CART
 } from './mutation-types'
 
 import {
@@ -24,9 +25,7 @@ import {
   reqLogout,
   reqShopGoods,
   reqShopInfo,
-  reqShopRatings,
-  increment_food_count,
-  decrement_food_count,
+  reqShopRatings
 } from '../api'
 
 export default {
@@ -120,6 +119,11 @@ export default {
       }else{
         commit(DECREMENT_FOOD_COUNT,{food})
       }
+    },
+
+    //同步清空购物车
+    clearCart({commit}){
+      commit(CLEAR_CART)
     }
 
 }

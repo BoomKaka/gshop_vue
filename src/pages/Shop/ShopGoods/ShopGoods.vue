@@ -13,7 +13,6 @@
           </li>
         </ul>
       </div>
-
       <div class="foods-wrapper" ref="foodsWrapper">
         <ul ref = "foodsUl">
           <li class="food-list-hook" v-for="(good,index) in goods" :key="index">
@@ -42,9 +41,11 @@
             </ul>
           </li>
         </ul>
+
       </div>
-      <Food :food="food" ref="food"></Food>
+      <ShowCart></ShowCart>
     </div>
+    <Food :food="food" ref="food"></Food>
   </div>
 </template>
 
@@ -53,6 +54,7 @@ import BScroll from '@better-scroll/core'
 import {mapState} from 'vuex'
 import CartControl from '../../../components/CartControl/CartControl'
 import Food from '../../../components/Food/Food'
+import ShowCart from '../../../components/ShopCart/ShopCart'
 
 export default {
   data(){
@@ -141,7 +143,8 @@ export default {
 
   components:{
     CartControl,
-    Food
+    Food,
+    ShowCart
   }
 }
 </script>

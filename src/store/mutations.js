@@ -13,6 +13,7 @@ import {
   RECEIVE_RATINGS,
   INCREMENT_FOOD_COUNT,
   DECREMENT_FOOD_COUNT,
+  CLEAR_CART
 } from './mutation-types'
 
 export default {
@@ -50,13 +51,25 @@ export default {
        * 属性值
        */
       Vue.set(food, "count", 1)  //表示在一个已经绑定的对象中新增一个属性，及它的属性值，让新增的属性也有数据绑定
+      //将food添加到CartFoods中
+      state.cartFoods.push(food)  //food放到了cartFoods中，
     }else{
-      food.count++
+      food.count++                //修改food的count值，cartFoods中对应的food也可以看到
     }
   },
   [DECREMENT_FOOD_COUNT](state,{food}){
     if(food.count){  //只有有值才去减
       food.count--
+      if(food.count===0){
+        //将food从cartFoods中移除
+        state.cartFoods.splice(state.cartFoods.indexOf(food),1)
+      }
     }
+  },
+  [CLEAR_CART](state){
+    //清除food中的count
+    state.cartFoods.forEach(food => food.count = 0)
+    //清除购物车中所有购物项
+    state.cartFoods =[]
   }
 }
