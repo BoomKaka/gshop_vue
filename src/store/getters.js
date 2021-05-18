@@ -7,5 +7,8 @@
   },
   totalPrice(state){
     return state.cartFoods.reduce((proTotal,food) => proTotal + food.count*food.price , 0)
+  },
+  positiveSize(state){
+    return state.ratings.reduce((proTotal,rating) => proTotal + (rating.rateType===0?1:0), 0 )
   }
 }
